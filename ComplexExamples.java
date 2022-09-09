@@ -146,31 +146,15 @@ public class ComplexExamples {
             System.out.println("Key: " + key + "\n" + "Value: " + value);
         }
 
-
-
-
-
-
-
         /*
         Task2
 
             [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
          */
-        int[] arr = {3, 5, 2, 7};
 
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr.length; j++) {
-                if (i == j) {
-                    continue;
-                }
-                if (arr[i] + arr[j] == 10 & i < j) {
-                    System.out.println("[" + arr[i] + ", " + arr[j] + "]");
-                }
-            }
-        }
-
-
+        int[] arr = {2, 8, 3, 7, 4, 6};
+        int number = 10;
+        numbersSum(arr, number);
 
         /*
         Task3
@@ -183,11 +167,32 @@ public class ComplexExamples {
                     fuzzySearch("lw", "cartwheel"); // false
          */
 
-        ComplexExamples fuzzy = new ComplexExamples();
-        System.out.println(fuzzy.fuzzySearch("cwheeel", "cartwheel"));
+        String sourceStr = "cwheeel";
+        String searchStr = "cartwheel";
+
+        System.out.println(fuzzySearch(sourceStr, searchStr));
+
     }
 
-    public boolean fuzzySearch(String source, String search) {
+    //task2
+    static void numbersSum(int[] arr, int number) {
+        int[] arrResult = null;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (arr[i] + arr[j] == number & i < j & arrResult == null) {
+                    arrResult = new int[]{arr[i], arr[j]};
+                    System.out.println(Arrays.toString(arrResult));
+                    break;
+                }
+            }
+        }
+    }
+
+    //task3
+    static boolean fuzzySearch(String source, String search) {
         char[] sourceArray = source.toCharArray();
         int[] charIndex = new int[source.length()];
         int index = search.indexOf(sourceArray[0]);
@@ -203,10 +208,5 @@ public class ComplexExamples {
         boolean found = Arrays.stream(charIndex).anyMatch(x -> x == -1);
         return !found;
     }
-
-
-
-
-
 
 }
