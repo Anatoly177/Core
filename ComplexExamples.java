@@ -1,13 +1,8 @@
 package homework;
 
-//import lombok.EqualsAndHashCode;
-//import lombok.Getter;
-//import lombok.Setter;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
 
 public class ComplexExamples {
 
@@ -128,9 +123,7 @@ public class ComplexExamples {
                     .sorted((Comparator.comparing(Person::getId).reversed()))
                     .sorted((Comparator.comparing(Person::getName).reversed()))
                     .collect(Collectors.groupingBy(Person::getName, Collectors.counting()))
-                    .forEach((key, value) -> {
-                        System.out.println("Key: " + key + "\nValue: " + value);
-                    });
+                    .forEach((key, value) -> System.out.println("Key: " + key + "\nValue: " + value));
         } else System.out.println("RAW_DATA is null!");
 
 
