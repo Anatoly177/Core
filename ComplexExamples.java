@@ -7,8 +7,7 @@ package homework;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class ComplexExamples {
 
@@ -122,37 +121,26 @@ public class ComplexExamples {
                 Value:1
          */
 
+        if (RAW_DATA != null) {
+            Arrays.stream(RAW_DATA)
+                    .filter(o -> o.getName() != null)
+                    .distinct()
+                    .sorted((Comparator.comparing(Person::getId).reversed()))
+                    .sorted((Comparator.comparing(Person::getName).reversed()))
+                    .collect(Collectors.groupingBy(Person::getName, Collectors.counting()))
+                    .forEach((key, value) -> {
+                        System.out.println("Key: " + key + "\nValue: " + value);
+                    });
+        } else System.out.println("RAW_DATA is null!");
 
-        Map<String, List<Integer>> map1 = Arrays.stream(RAW_DATA)
-                .distinct()
-                .collect(Collectors.groupingBy(Person::getName, mapping(Person::getId, toList())));
-
-        Collection<List<Integer>> values = map1.values();
-
-        List<Long> countId = values.stream().map(x -> (long) x.size()).toList();
-
-        Set<String> keys = map1.keySet();
-        List<String> keysList = new ArrayList<>(keys);
-
-        Map<String, Long> mapResult = new HashMap<>();
-
-        for (int i = 0; i < keysList.size(); i++) {
-            mapResult.put(keysList.get(i), countId.get(i));
-        }
-
-        for(Map.Entry<String, Long> entry: mapResult.entrySet()) {
-            String key = entry.getKey();
-            Long value = entry.getValue();
-            System.out.println("Key: " + key + "\n" + "Value: " + value);
-        }
 
         /*
         Task2
 
             [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
          */
-
-        int[] arr = {2, 8, 3, 7, 4, 6};
+        System.out.println("\nTask2:\n");
+        int[] arr = {3, 4, 2, 7};
         int number = 10;
         numbersSum(arr, number);
 
@@ -167,8 +155,9 @@ public class ComplexExamples {
                     fuzzySearch("lw", "cartwheel"); // false
          */
 
-        String sourceStr = "cwheeel";
-        String searchStr = "cartwheel";
+        System.out.println("\nTask3 :\n");
+        String sourceStr = "car";
+        String searchStr = "ca6$$#_rtwheel";
 
         System.out.println(fuzzySearch(sourceStr, searchStr));
 
@@ -176,37 +165,42 @@ public class ComplexExamples {
 
     //task2
     static void numbersSum(int[] arr, int number) {
-        int[] arrResult = null;
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr.length; j++) {
-                if (i == j) {
-                    continue;
-                }
-                if (arr[i] + arr[j] == number & i < j & arrResult == null) {
-                    arrResult = new int[]{arr[i], arr[j]};
+        if (arr != null) {
+            for (int k = 0; k < arr.length * arr.length; ++k) {
+                int i = k / arr.length;
+                int j = k % arr.length;
+
+                if (i == j) {continue;}
+
+                if (arr[i] + arr[j] == number) {
+                    int[] arrResult = new int[] {arr[i], arr[j]};
                     System.out.println(Arrays.toString(arrResult));
                     break;
                 }
             }
-        }
+        } else System.out.println("array is null!");
     }
+
 
     //task3
     static boolean fuzzySearch(String source, String search) {
+        if (source == null || search == null) {
+            System.out.println("Parameter is null!");
+            return false;
+        }
         char[] sourceArray = source.toCharArray();
-        int[] charIndex = new int[source.length()];
+        if (search.indexOf(sourceArray[0]) == -1) {
+            return false;
+        }
         int index = search.indexOf(sourceArray[0]);
-        charIndex[0] = index;
         for (int i = 1; i < source.length(); i++) {
-            if (search.indexOf(sourceArray[i], index + 1 ) != -1) {
+            if (search.indexOf(sourceArray[i], index + 1) != -1) {
                 index = search.indexOf(sourceArray[i], index + 1);
-                    charIndex[i] = search.indexOf(sourceArray[i], index);
             } else {
-                charIndex[i] = search.indexOf(sourceArray[i], index + 1);
+                return false;
             }
         }
-        boolean found = Arrays.stream(charIndex).anyMatch(x -> x == -1);
-        return !found;
+        return true;
     }
 
 }
